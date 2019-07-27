@@ -9,7 +9,7 @@ __lua__
  for testing, uncomment below:
 ]]--
 
---disable_preview = true
+disable_preview = true
 
 
 --[[
@@ -18,7 +18,7 @@ __lua__
  variable (1..15, integer):
 ]]--
 
--- difficulty = 2
+-- difficulty = 15
 
 --[[
  set all of your variables
@@ -26,13 +26,13 @@ __lua__
 ]]--
 function _init()
  -- these are required!
- name="jump over the obstacle"
- made_by="@szczm_"
- oneliner="jump! 🅾️"
+ name="gamejam game"
+ made_by="@random_disconnect"
+ oneliner="Come in First"
  
  -- add a personal touch ◆
- outer_frame_color=12
- inner_frame_color=7
+ outer_frame_color=9
+ inner_frame_color=12
 
  --[[
   set status variable to inform
@@ -42,13 +42,13 @@ function _init()
  ]]--
  status="won"
 
- t=0 
+ t=0
  mt=0
  
  -- player
- y=88
- dy=0
- frame=2
+ y=80 -- initial spawn
+ dy=0 -- velocity
+ frame=2 -- not sure
  
  --[[
   you could use the difficulty
@@ -68,9 +68,9 @@ function _init()
  ]]--
 
  -- obstacle
- ow=1+flr(rnd(3))
- oh=4-ow
- ox=240+flr(rnd(10))*8
+ ow=1+flr(rnd(3))       -- obstacle width
+ oh=4-ow                -- obstacle height or number of blocks to spawn
+ ox=240+flr(rnd(10))*8  -- obstacle spawn or x-position
 end
 
 function _update60()
@@ -84,12 +84,18 @@ function _update60()
  --[[
   use dt for all diff.dependent
   actions, and 1/60 otherwise
+  if ox == mt, map and obstacles move at same rate
+  if mt < ox, obstacles move towards character
+  if mt > ox, map moves faster than obstacles character.
  ]]--
  t+=dt
  mt=t*80
- ox-=dt*80
+ ox-=dt*80 -- obstacle movement.
  
- -- animation magic
+ --[[
+    animation magic
+    
+]]--
  frame=2+flr(5*(2*t%1))
 
  --[[
