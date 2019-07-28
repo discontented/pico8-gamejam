@@ -12,22 +12,22 @@ function _init()
         property = "Name"
     }
 
-    -- function myObj:new(o, property)
-    --     o = o or {}
-    --     setmetatable(o, self)
-    --     self.__index = self
-    --     self.property = property or 0
-    --     return o
-    -- end
-
-    -- Constructor style 1
-    function myObj:new(property)
-        local o = {} -- new object
+    function myObj:new(o, property)
+        o = o or {}
         setmetatable(o, self)
-        o.property = property
         self.__index = self
+        self.property = property or 0
         return o
     end
+
+    -- -- Constructor style 1
+    -- function myObj:new(property)
+    --     local o = {} -- new object
+    --     setmetatable(o, self)
+    --     o.property = property
+    --     self.__index = self
+    --     return o
+    -- end
 
     function myObj:method()
         print(self.property)
@@ -35,6 +35,22 @@ function _init()
 
     function myObj:setter(property)
         self.property = property
+    end
+
+    -- Inheritance
+
+    Child = myObj:new()
+
+    function Child:new(o, arg1)
+        o = o or myObj:new(o)
+        setmetatable(o, self)
+        self.__index = self
+        self.arg1 = arg1
+        return o
+    end
+
+    function Child:printArg()
+        print(self.arg1)
     end
 end
 
@@ -46,7 +62,10 @@ function _draw()
     -- cls(flr(rnd(16)))
     -- print(myObj.property)
     cls(0)
-    obj3 = myObj:new("new")
-    obj3:setter("this")
-    obj3:method()
+    -- obj3 = myObj:new("new")
+    -- obj3:setter("this")
+    -- obj3:method()
+    child = Child:new({property = "new"}, "arg")
+    child:method()
+    child:printArg()
 end

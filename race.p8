@@ -25,8 +25,13 @@ function _init()
     t=0
     mt=0
 
-    -- enemies
-    frame = 2      -- sprite frame.  changes as sprite moves
+    --[[
+    Enemies
+    ]]--
+    enemies = {}
+    enemyPos = getBlock(0, 5)
+    enemies[1] = Racer:new(nil, enemyPos.x, enemyPos.y, 2)
+    enemies[2] = Racer:new(nil, enemyPos.x, enemyPos.y + 1, 2)
 
     -- Global variables
     -- Sprite indices
@@ -38,9 +43,11 @@ function _init()
 
     lanes = 6
 
-    player = Racer:new(0, 4, 2)
-
-    -- Racer Class
+    --[[
+    Player
+    ]]--
+    playerPos = getBlock(0, 3)
+    player = Player:new({playerPos.x, playerPos.y, 2})
 end
 
 function _update60()
@@ -58,28 +65,10 @@ function _update60()
     t+=dt
     mt=t
     
-    if btnp(🅾️) then
-        walk = 3
-        if(right)then
-            right = false
-            left = true -- if true then the left leg is on the ground
-            position+=4
-        end
-    end
-
-    if btnp(❎) then
-        walk = 5
-        if(left)then
-            left = false
-            right = true
-            position+=4
-        end
-    end
-
-
     --[[
         animation magic
     ]]--
+    
     frame=2+flr(5*(2*t%1))
 
     --[[
@@ -104,7 +93,6 @@ end
 
 function _draw()
     cls(1)
-    print(t)
 
     draw_lanes(lanes)
 
@@ -113,11 +101,13 @@ function _draw()
     -- Draw lane markers
   
     -- player
-    player:drawChar()
-    create_char(walk, start_pos.x + position, start_pos.y + 2)
+    spr(player.sprite, player.x, player.y)
  
     -- enemies
-    enemy:drawChar()
-    create_char(frame, enemy1.x, enemy1.y+2)
-
+    for enemy in all(enemies) do
+        enemy:setSprite(frame)
+        spr(enemy.sprite, enemy.x, enemy.y)
+        print(player.y)
+        print(enemy.y)
+    end
 end

@@ -1,32 +1,31 @@
 pico-8 cartridge // http://www.pico-8.com
 version 16
 __lua__
-
 Racer = {}
 
-function Racer:new(x, y, sprite)
-    local o = {} -- new object
+function Racer:new(o, x, y, sprite)
+    o = o or {}
     setmetatable(o, self)
-    local coordinates = self.getBlock(x, y)
-    o.x = coordinates.x
-    o.y = coordinates.y
-    o.sprite = sprite
-    o.position = 0
-    o.left = true
-    o.right = true
     self.__index = self
+
+    self.x = x
+    self.y = y
+
+    -- Sprite index
+    self.sprite = sprite
+
+    -- Current x-value position in race lane.  init to 0
+    self.position = 0
+    
     return o
 end
 
+-- Generates a random uniform color
 function Racer:getUniform()
     self.color = flr(rnd(16))
-
 end
 
-function drawChar()
-    spr(self.sprite, self.x + self.position, self.y)
-end
-
+-- Draws uniform
 function Racer:setUniform()
     -- frames: 
     -- x: 18, 19, 20
@@ -37,15 +36,15 @@ function Racer:setUniform()
     end
 end
 
--- from top right, index starts at 0
--- Divdes screen as 8 by 8
--- bl_x - block position of x 
--- bl_y - block position of y
-function Racer:getBlock(bl_x, bl_y)
-    local x
-    local y
-    return { 
-        x = 16 * bl_x,
-        y = 16 * bl_y 
-    }
+-- Creates a sprite and draws to the screen
+function Racer:drawChar()
+    spr(self.sprite, self.x + self.position, self.y)
+end
+
+function Racer:updatePosition(x)
+    self.position += x
+end
+
+function Racer:setSprite(sprite)
+    self.sprite = sprite
 end

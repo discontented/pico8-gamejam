@@ -16,13 +16,9 @@ function draw_lanes(n)
     end
 end
 
--- from top right, index starts at 0
--- Divdes screen as 8 by 8
--- bl_x - block position of x 
--- bl_y - block position of y
-function get_block(bl_x, bl_y)
+function getBlock(bl_x, bl_y)
     return { 
-        x = 16*bl_x,
-        y = 16*bl_y 
+        x = 16 * bl_x,
+        y = 16 * bl_y 
     }
 end
