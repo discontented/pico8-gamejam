@@ -10,20 +10,19 @@ function draw_lanes(n)
         for y=0,n do
             -- draw top
             spr(race_map['lane'], 8*x, sy+8*y)  -- draws lanes
-            line(8, sy, 8, sy + 8*(y+1) - 1) -- starting line
-            line(finish_line, sy, finish_line, sy + 8*(y+1) - 1) -- finish line
+            line(8, sy, 8, sy + 8*(y+1) - 1, 7) -- starting line
+            line(finish_line, sy, finish_line, sy + 8*(y+1) - 1, 7) -- finish line
         end
     end
 end
 
--- Returns a randomized sprite representing a racer
-function create_char(sprite, x, y)
-    spr(sprite, x, y)
-end
-
+-- from top right, index starts at 0
+-- Divdes screen as 8 by 8
+-- bl_x - block position of x 
+-- bl_y - block position of y
 function get_block(bl_x, bl_y)
     return { 
-        ["x"] = 16*bl_x,
-        ["y"] = 16*bl_y 
+        x = 16*bl_x,
+        y = 16*bl_y 
     }
 end

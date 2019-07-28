@@ -2,6 +2,8 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 #include functions.p8
+#include racer.p8
+#include player.p8
 #include race.p8
 -- picoware template cart
 -- the picoware team

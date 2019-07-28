@@ -38,29 +38,9 @@ function _init()
 
     lanes = 6
 
-    position = 0 -- initial starting position
+    player = Racer:new(0, 4, 2)
 
-    walk = 2
-    right = true   -- both legs are on the ground
-    left = true    -- both legs are on the ground
-
-
-    --[[
-    you could use the difficulty
-    variable to change things
-    with difficulty. example:
-
-    obstacle_count = difficulty/5
-
-    remember that difficulty goes
-    from 1 to 15.
-    ]]--
-
-    --[[
-    use rnd to make the game
-    a bit different each time
-    it is run!
-    ]]--
+    -- Racer Class
 end
 
 function _update60()
@@ -133,11 +113,11 @@ function _draw()
     -- Draw lane markers
   
     -- player
-    start_pos = get_block(0, 4);
-    create_char(walk, start_pos.x + position, start_pos.y+2)
+    player:drawChar()
+    create_char(walk, start_pos.x + position, start_pos.y + 2)
  
     -- enemies
-    enemy1 = get_block(0,5);
+    enemy:drawChar()
     create_char(frame, enemy1.x, enemy1.y+2)
 
 end
