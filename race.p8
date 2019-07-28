@@ -8,11 +8,11 @@ function _init()
     -- these are required!
     name="gamejam game"
     made_by="@random_disconnect"
-    oneliner="race!!"
+    oneliner="move your legs ⬅️➡️"
 
     -- add a personal touch ◆
-    outer_frame_color=9
-    inner_frame_color=12
+    outer_frame_color=0
+    inner_frame_color=7
 
     --[[
     set status variable to inform
@@ -28,19 +28,21 @@ function _init()
     --[[
     Enemies
     ]]--
+    offset = 8
+
     enemy1 = {
         x = getBlock(0, 5).x,
-        y = getBlock(0, 5).y,
+        y = getBlock(1, 5).y,
         sprite = 2,
         position = 0,
-        uniform = flr(rnd(16))
+        color = flr(rnd(16))
     }
     enemy2 = {
         x = getBlock(0, 6).x,
-        y = getBlock(0, 6).y,
+        y = getBlock(1, 6).y,
         sprite = 2,
         position = 0,
-        uniform = flr(rnd(16))
+        color = flr(rnd(16))
     }
     enemies = {}
     
@@ -55,18 +57,21 @@ function _init()
         ["top"] = 34
     }
 
+    -- color_1 = flr(rnd(16)) random bg colors
+    -- color_2 = flr(rnd(16))
     lanes = 6
 
     --[[
     Player
     ]]--
     player = {
-        x = getBlock(0,4).x,
-        y = getBlock(0,4).y,
+        x = getBlock(0,4).x + offset,
+        y = getBlock(1,4).y,
         sprite = 2,
         position = 0,
         left = true,
-        right = true
+        right = true,
+        speed = 5
     }
 end
 
@@ -91,6 +96,10 @@ function _update60()
     
     frame=2+flr(5*(2*t%1))
 
+    for enemy in all(enemies) do
+        enemy.speed = rnd(60)*dt
+    end
+
     --[[
     use transition_done to check
     for on-screen collisions etc;
@@ -109,41 +118,68 @@ end
 function update_player(dt)
     -- jelpi wins
     if (status=="won") return
-
-    if btnp(❎) then
+    
+    if btnp(⬅️) then
         player.sprite = 6
         if(player.left)then
             player.left = false
             player.right = true
-            player.position+=4
+            player.position+= player.speed
         end
     end
 
-    if btnp(🅾️) then
+    if btnp(➡️) then
         player.sprite = 3
         if(player.right)then
             player.right = false
             player.left = true -- if true then the left leg is on the ground
-            player.position+=4
+            player.position += player.speed
         end
+    end
+    print(player.x)
+
+    a = player.position >= finish_line
+    b = enemy1.position <= finish_line
+    c = enemy2.position <= finish_line
+    if (a and b and c) then
+        status = "won"
+        print("You"..status)
     end
 end
 
 function _draw()
-    cls(1)
+    cls(0)
+
+    -- Draw Background
+
+    color_flag = 1
+    
+    for i=0,16 do
+        for j=0,8 do
+            
+            if (color_flag == 1) then
+                rectfill(i*8, j*8, i*8+8, j*8+8, 0)
+            else
+                rectfill(i*8, j*8, i*8+8, j*8+8, 7)
+            end
+            color_flag *= -1
+        end
+    end
+
+    -- Draw lane markers
 
     draw_lanes(lanes)
 
     local mx=mt%8 -- spr size
  
-    -- Draw lane markers
-  
     -- player
-    spr(player.sprite, player.x, player.y)
- 
+    spr(player.sprite, player.x + player.position, player.y)
+
     -- enemies
     for enemy in all(enemies) do
         enemy.sprite = frame
-        spr(enemy.sprite, enemy.x, enemy.y)
+        enemy.position += enemy.speed
+        spr(enemy.sprite, enemy.x + enemy.position, enemy.y)
+        drawUniform(enemy)
     end
 end

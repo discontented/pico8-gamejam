@@ -14,7 +14,7 @@ __lua__
  for testing, uncomment below:
 ]]--
 
-disable_preview = true
+-- disable_preview = true
 
 --[[
  to set higher initial
@@ -22,7 +22,7 @@ disable_preview = true
  variable (1..15, integer):
 ]]--
 
--- difficulty = 15
+difficulty = 5
 
 
 --------------------------------
