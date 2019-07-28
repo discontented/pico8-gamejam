@@ -28,11 +28,25 @@ function _init()
     --[[
     Enemies
     ]]--
+    enemy1 = {
+        x = getBlock(0, 5).x,
+        y = getBlock(0, 5).y,
+        sprite = 2,
+        position = 0,
+        uniform = flr(rnd(16))
+    }
+    enemy2 = {
+        x = getBlock(0, 6).x,
+        y = getBlock(0, 6).y,
+        sprite = 2,
+        position = 0,
+        uniform = flr(rnd(16))
+    }
     enemies = {}
-    enemyPos = getBlock(0, 5)
-    enemies[1] = Racer:new(nil, enemyPos.x, enemyPos.y, 2)
-    enemies[2] = Racer:new(nil, enemyPos.x, enemyPos.y + 1, 2)
-
+    
+    add(enemies, enemy1)
+    add(enemies, enemy2)
+    
     -- Global variables
     -- Sprite indices
     race_map = {
@@ -46,8 +60,14 @@ function _init()
     --[[
     Player
     ]]--
-    playerPos = getBlock(0, 3)
-    player = Player:new({playerPos.x, playerPos.y, 2})
+    player = {
+        x = getBlock(0,4).x,
+        y = getBlock(0,4).y,
+        sprite = 2,
+        position = 0,
+        left = true,
+        right = true
+    }
 end
 
 function _update60()
@@ -89,6 +109,24 @@ end
 function update_player(dt)
     -- jelpi wins
     if (status=="won") return
+
+    if btnp(❎) then
+        player.sprite = 6
+        if(player.left)then
+            player.left = false
+            player.right = true
+            player.position+=4
+        end
+    end
+
+    if btnp(🅾️) then
+        player.sprite = 3
+        if(player.right)then
+            player.right = false
+            player.left = true -- if true then the left leg is on the ground
+            player.position+=4
+        end
+    end
 end
 
 function _draw()
@@ -105,9 +143,7 @@ function _draw()
  
     -- enemies
     for enemy in all(enemies) do
-        enemy:setSprite(frame)
+        enemy.sprite = frame
         spr(enemy.sprite, enemy.x, enemy.y)
-        print(player.y)
-        print(enemy.y)
     end
 end
