@@ -1,9 +1,8 @@
 pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
-sy = 64
-starting_mark = 16
-finish_line = 112 -- x position of finish line
+
+-- disable_preview = true
 
 -- n is the number of lanes to draw
 function draw_lanes(n)
@@ -58,8 +57,8 @@ function _init()
     oneliner="move your legs ⬅️➡️"
 
     -- add a personal touch ◆
-    outer_frame_color=0
-    inner_frame_color=7
+    outer_frame_color=7
+    inner_frame_color=0
 
     --[[
     set status variable to inform
@@ -82,14 +81,16 @@ function _init()
         y = getBlock(1, 5).y,
         sprite = 2,
         position = 0,
-        color = flr(rnd(16))
+        color = flr(rnd(16)),
+        finished = false
     }
     enemy2 = {
         x = getBlock(0, 6).x,
         y = getBlock(1, 6).y,
         sprite = 2,
         position = 0,
-        color = flr(rnd(16))
+        color = flr(rnd(16)),
+        finished = false
     }
     enemies = {}
     
@@ -107,6 +108,9 @@ function _init()
     -- color_1 = flr(rnd(16)) random bg colors
     -- color_2 = flr(rnd(16))
     lanes = 6
+    sy = 64
+    starting_mark = 16
+    finish_line = 112 -- x position of finish line
 
     --[[
     Player
@@ -158,6 +162,14 @@ function _update60()
     if not transition_done then
         return
     end
+
+    -- win condition
+    a = player.position + player.x >= finish_line
+    b = enemy1.position <= finish_line
+    c = enemy2.position <= finish_line
+    if (a and (b and c)) then
+        status = "won"
+    end
  
     update_player(dt)
 end
@@ -183,15 +195,7 @@ function update_player(dt)
             player.position += player.speed
         end
     end
-    print(player.x)
-
-    a = player.position >= finish_line
-    b = enemy1.position <= finish_line
-    c = enemy2.position <= finish_line
-    if (a and b and c) then
-        status = "won"
-        print("You"..status)
-    end
+    
 end
 
 function _draw()
