@@ -7,13 +7,14 @@ __lua__
 -- n is the number of lanes to draw
 function draw_lanes(n)
     for x=0,16 do
-            spr(race_map['top'], 8*x, 60)
+            spr(race_map['top'], 8*x, sy - 4)
         for y=0,n do
-            -- draw top
+            -- draw top fence
             spr(race_map['lane'], 8*x, sy+8*y)  -- draws lanes
             line(starting_mark, sy, starting_mark, sy + 8*(y+1) - 4, 7) -- starting line
             line(finish_line, sy, finish_line, sy + 8*(y+1) - 4, 7) -- finish line
         end
+            -- draw bottom
             spr(race_map['bottom'], 8*x, sy + 8*(n))
     end
 end
@@ -71,33 +72,7 @@ function _init()
     t=0
     mt=0
 
-    --[[
-    Enemies
-    ]]--
-    offset = 8
-
-    enemy1 = {
-        x = getBlock(0, 5).x,
-        y = getBlock(1, 5).y,
-        sprite = 2,
-        position = 0,
-        color = flr(rnd(16)),
-        finished = false
-    }
-    enemy2 = {
-        x = getBlock(0, 6).x,
-        y = getBlock(1, 6).y,
-        sprite = 2,
-        position = 0,
-        color = flr(rnd(16)),
-        finished = false
-    }
-    enemies = {}
-    
-    add(enemies, enemy1)
-    add(enemies, enemy2)
-    
-    -- Global variables
+        -- Global variables
     -- Sprite indices
     race_map = {
         ["bottom"] = 32,
@@ -108,16 +83,43 @@ function _init()
     -- color_1 = flr(rnd(16)) random bg colors
     -- color_2 = flr(rnd(16))
     lanes = 6
-    sy = 64
+    sy = 48
     starting_mark = 16
     finish_line = 112 -- x position of finish line
+
+    --[[
+    Enemies
+    ]]--
+    x_offset = 8
+    y_offset = 2
+
+    enemy1 = {
+        x = getBlock(0, 5).x,
+        y = getBlock(0, 1).y + sy + y_offset,
+        sprite = 2,
+        position = 0,
+        color = flr(rnd(16)),
+        finished = false
+    }
+    enemy2 = {
+        x = getBlock(0, 6).x,
+        y = getBlock(0, 2).y + sy + y_offset,
+        sprite = 2,
+        position = 0,
+        color = flr(rnd(16)),
+        finished = false
+    }
+    enemies = {}
+    
+    add(enemies, enemy1)
+    add(enemies, enemy2)
 
     --[[
     Player
     ]]--
     player = {
-        x = getBlock(0,4).x + offset,
-        y = getBlock(1,4).y,
+        x = getBlock(0,4).x + x_offset,
+        y = getBlock(0,0).y + sy + y_offset,
         sprite = 2,
         position = 0,
         left = true,
@@ -216,7 +218,8 @@ function _draw()
             color_flag *= -1
         end
     end
-    rectfill(0, 116, 128, 128, 3)
+    -- Fills in grasss
+    rectfill(0, sy, 128, 128, 3)
 
     -- Draw lane markers
 
